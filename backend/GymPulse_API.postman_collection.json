@@ -1,0 +1,912 @@
+{
+  "info": {
+    "name": "GymPulse API",
+    "description": "Complete Postman collection for GymPulse Gym Management Platform API",
+    "_postman_id": "gympulse-api-collection-v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "gym_id", "value": "1", "type": "string" },
+    { "key": "member_id", "value": "1", "type": "string" },
+    { "key": "trainer_id", "value": "1", "type": "string" },
+    { "key": "payment_id", "value": "1", "type": "string" },
+    { "key": "workout_id", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Register - Super Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) {",
+                  "  pm.collectionVariables.set('token', json.access_token);",
+                  "  console.log('Token saved:', json.access_token.substring(0,20) + '...');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Raj\",\n  \"last_name\": \"Patel\",\n  \"email\": \"raj@gympulse.io\",\n  \"password\": \"Admin@123\",\n  \"role\": \"super_admin\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Register - Gym Owner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) pm.collectionVariables.set('token', json.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Sarah\",\n  \"last_name\": \"Chen\",\n  \"email\": \"sarah@corefit.com\",\n  \"password\": \"Owner@123\",\n  \"role\": \"gym_owner\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Register - Trainer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) pm.collectionVariables.set('token', json.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Alex\",\n  \"last_name\": \"Rivera\",\n  \"email\": \"alex@trainer.com\",\n  \"password\": \"Trainer@123\",\n  \"role\": \"trainer\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Register - Member",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) pm.collectionVariables.set('token', json.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Marcus\",\n  \"last_name\": \"Johnson\",\n  \"email\": \"marcus@member.com\",\n  \"password\": \"Member@123\",\n  \"role\": \"member\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login - Super Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) {",
+                  "  pm.collectionVariables.set('token', json.access_token);",
+                  "  console.log('Logged in as:', json.role, '| Name:', json.name);",
+                  "}",
+                  "pm.test('Login successful', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(json.access_token).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"raj@gympulse.io\",\n  \"password\": \"Admin@123\",\n  \"role\": \"super_admin\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Gym Owner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) pm.collectionVariables.set('token', json.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sarah@corefit.com\",\n  \"password\": \"Owner@123\",\n  \"role\": \"gym_owner\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Trainer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) pm.collectionVariables.set('token', json.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alex@trainer.com\",\n  \"password\": \"Trainer@123\",\n  \"role\": \"trainer\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Member",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) pm.collectionVariables.set('token', json.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"marcus@member.com\",\n  \"password\": \"Member@123\",\n  \"role\": \"member\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Wrong Password (Expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Should return 401', function() {",
+                  "  pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"raj@gympulse.io\",\n  \"password\": \"wrongpassword\",\n  \"role\": \"super_admin\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password?email=raj@gympulse.io",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgot-password"],
+              "query": [{ "key": "email", "value": "raj@gympulse.io" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏋️ Gyms",
+      "item": [
+        {
+          "name": "Create Gym",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('gym_id', json.id.toString());",
+                  "pm.test('Gym created', function() { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CoreFit Studio\",\n  \"location\": \"San Francisco, CA\",\n  \"plan\": \"Pro\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/gyms/", "host": ["{{base_url}}"], "path": ["gyms", ""] }
+          }
+        },
+        {
+          "name": "List All Gyms",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns array', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/gyms/", "host": ["{{base_url}}"], "path": ["gyms", ""] }
+          }
+        },
+        {
+          "name": "Get Gym by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/gyms/{{gym_id}}", "host": ["{{base_url}}"], "path": ["gyms", "{{gym_id}}"] }
+          }
+        },
+        {
+          "name": "Update Gym",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CoreFit Studio - Updated\",\n  \"location\": \"San Francisco, CA - Main Branch\",\n  \"plan\": \"Enterprise\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/gyms/{{gym_id}}", "host": ["{{base_url}}"], "path": ["gyms", "{{gym_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Gym",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/gyms/{{gym_id}}", "host": ["{{base_url}}"], "path": ["gyms", "{{gym_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Members",
+      "item": [
+        {
+          "name": "Create Member",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('member_id', json.id.toString());"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 4,\n  \"gym_id\": {{gym_id}},\n  \"trainer_id\": null,\n  \"membership_plan\": \"Annual\",\n  \"expiry_date\": \"2027-06-01T00:00:00\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/members/", "host": ["{{base_url}}"], "path": ["members", ""] }
+          }
+        },
+        {
+          "name": "List Members (All)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/members/", "host": ["{{base_url}}"], "path": ["members", ""] }
+          }
+        },
+        {
+          "name": "List Members by Gym",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/members/?gym_id={{gym_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["members", ""],
+              "query": [{ "key": "gym_id", "value": "{{gym_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Member by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/members/{{member_id}}", "host": ["{{base_url}}"], "path": ["members", "{{member_id}}"] }
+          }
+        },
+        {
+          "name": "Update Member",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 4,\n  \"gym_id\": {{gym_id}},\n  \"trainer_id\": 1,\n  \"membership_plan\": \"Half-Yearly\",\n  \"status\": \"Active\",\n  \"expiry_date\": \"2026-12-01T00:00:00\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/members/{{member_id}}", "host": ["{{base_url}}"], "path": ["members", "{{member_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Member",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/members/{{member_id}}", "host": ["{{base_url}}"], "path": ["members", "{{member_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏃 Trainers",
+      "item": [
+        {
+          "name": "Create Trainer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('trainer_id', json.id.toString());"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 3,\n  \"gym_id\": {{gym_id}},\n  \"specialty\": \"Strength & Conditioning\",\n  \"experience_years\": 8\n}"
+            },
+            "url": { "raw": "{{base_url}}/trainers/", "host": ["{{base_url}}"], "path": ["trainers", ""] }
+          }
+        },
+        {
+          "name": "List Trainers (All)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/trainers/", "host": ["{{base_url}}"], "path": ["trainers", ""] }
+          }
+        },
+        {
+          "name": "List Trainers by Gym",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/trainers/?gym_id={{gym_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["trainers", ""],
+              "query": [{ "key": "gym_id", "value": "{{gym_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Trainer by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/trainers/{{trainer_id}}", "host": ["{{base_url}}"], "path": ["trainers", "{{trainer_id}}"] }
+          }
+        },
+        {
+          "name": "Update Trainer",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 3,\n  \"gym_id\": {{gym_id}},\n  \"specialty\": \"CrossFit & HIIT\",\n  \"experience_years\": 10\n}"
+            },
+            "url": { "raw": "{{base_url}}/trainers/{{trainer_id}}", "host": ["{{base_url}}"], "path": ["trainers", "{{trainer_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📅 Attendance",
+      "item": [
+        {
+          "name": "Check In (Manual)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Check-in recorded', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(pm.response.json().id).to.be.a('number');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"member_id\": {{member_id}},\n  \"method\": \"manual\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/attendance/checkin", "host": ["{{base_url}}"], "path": ["attendance", "checkin"] }
+          }
+        },
+        {
+          "name": "Check In (QR)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"member_id\": {{member_id}},\n  \"method\": \"qr\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/attendance/checkin", "host": ["{{base_url}}"], "path": ["attendance", "checkin"] }
+          }
+        },
+        {
+          "name": "Member Attendance History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/attendance/member/{{member_id}}", "host": ["{{base_url}}"], "path": ["attendance", "member", "{{member_id}}"] }
+          }
+        },
+        {
+          "name": "Today's Attendance Count (Gym)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns count', function() {",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.count).to.be.a('number');",
+                  "  console.log('Today attendance:', json.count);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/attendance/gym/{{gym_id}}/today", "host": ["{{base_url}}"], "path": ["attendance", "gym", "{{gym_id}}", "today"] }
+          }
+        },
+        {
+          "name": "Weekly Attendance (Gym)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/attendance/gym/{{gym_id}}/weekly", "host": ["{{base_url}}"], "path": ["attendance", "gym", "{{gym_id}}", "weekly"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💳 Payments",
+      "item": [
+        {
+          "name": "Create Payment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('payment_id', json.id.toString());",
+                  "pm.test('Payment created', function() { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"member_id\": {{member_id}},\n  \"amount\": 1499.00,\n  \"description\": \"Annual Membership Renewal\",\n  \"method\": \"Stripe\",\n  \"invoice_number\": \"INV-2026-06-001\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/payments/", "host": ["{{base_url}}"], "path": ["payments", ""] }
+          }
+        },
+        {
+          "name": "Create Payment - Razorpay",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"member_id\": {{member_id}},\n  \"amount\": 899.00,\n  \"description\": \"Half-Yearly Membership\",\n  \"method\": \"Razorpay\",\n  \"invoice_number\": \"INV-2026-06-002\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/payments/", "host": ["{{base_url}}"], "path": ["payments", ""] }
+          }
+        },
+        {
+          "name": "List All Payments",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/payments/", "host": ["{{base_url}}"], "path": ["payments", ""] }
+          }
+        },
+        {
+          "name": "List Payments by Member",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/payments/?member_id={{member_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["payments", ""],
+              "query": [{ "key": "member_id", "value": "{{member_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Payment by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/payments/{{payment_id}}", "host": ["{{base_url}}"], "path": ["payments", "{{payment_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏋️ Workouts",
+      "item": [
+        {
+          "name": "Create Workout Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('workout_id', json.id.toString());",
+                  "pm.test('Workout created', function() { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Push Day A — Chest & Triceps\",\n  \"trainer_id\": {{trainer_id}},\n  \"member_id\": {{member_id}},\n  \"duration_minutes\": 55,\n  \"level\": \"Intermediate\",\n  \"exercises\": \"[{\\\"name\\\":\\\"Bench Press\\\",\\\"sets\\\":4,\\\"reps\\\":\\\"8-10\\\",\\\"weight\\\":\\\"80kg\\\"},{\\\"name\\\":\\\"Incline DB Press\\\",\\\"sets\\\":3,\\\"reps\\\":\\\"10-12\\\",\\\"weight\\\":\\\"30kg\\\"},{\\\"name\\\":\\\"Cable Flyes\\\",\\\"sets\\\":3,\\\"reps\\\":\\\"12-15\\\",\\\"weight\\\":\\\"15kg\\\"},{\\\"name\\\":\\\"Tricep Pushdown\\\",\\\"sets\\\":3,\\\"reps\\\":\\\"12-15\\\",\\\"weight\\\":\\\"20kg\\\"}]\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/workouts/", "host": ["{{base_url}}"], "path": ["workouts", ""] }
+          }
+        },
+        {
+          "name": "Create Workout Plan (HIIT)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"HIIT Cardio Blast\",\n  \"trainer_id\": {{trainer_id}},\n  \"member_id\": null,\n  \"duration_minutes\": 30,\n  \"level\": \"Beginner\",\n  \"exercises\": \"[{\\\"name\\\":\\\"Burpees\\\",\\\"sets\\\":4,\\\"reps\\\":\\\"15\\\",\\\"weight\\\":\\\"bodyweight\\\"},{\\\"name\\\":\\\"Jump Squats\\\",\\\"sets\\\":3,\\\"reps\\\":\\\"20\\\",\\\"weight\\\":\\\"bodyweight\\\"}]\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/workouts/", "host": ["{{base_url}}"], "path": ["workouts", ""] }
+          }
+        },
+        {
+          "name": "List All Workouts",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/workouts/", "host": ["{{base_url}}"], "path": ["workouts", ""] }
+          }
+        },
+        {
+          "name": "List Workouts by Trainer",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/workouts/?trainer_id={{trainer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["workouts", ""],
+              "query": [{ "key": "trainer_id", "value": "{{trainer_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "List Workouts by Member",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/workouts/?member_id={{member_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["workouts", ""],
+              "query": [{ "key": "member_id", "value": "{{member_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Workout by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/workouts/{{workout_id}}", "host": ["{{base_url}}"], "path": ["workouts", "{{workout_id}}"] }
+          }
+        },
+        {
+          "name": "Update Workout",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Push Day A — Updated\",\n  \"trainer_id\": {{trainer_id}},\n  \"member_id\": {{member_id}},\n  \"duration_minutes\": 60,\n  \"level\": \"Advanced\",\n  \"exercises\": \"[{\\\"name\\\":\\\"Bench Press\\\",\\\"sets\\\":5,\\\"reps\\\":\\\"6-8\\\",\\\"weight\\\":\\\"90kg\\\"}]\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/workouts/{{workout_id}}", "host": ["{{base_url}}"], "path": ["workouts", "{{workout_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Workout",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/workouts/{{workout_id}}", "host": ["{{base_url}}"], "path": ["workouts", "{{workout_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Dashboard",
+      "item": [
+        {
+          "name": "Super Admin Stats",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Super admin stats returned', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.total_gyms).to.be.a('number');",
+                  "  pm.expect(json.active_users).to.be.a('number');",
+                  "  pm.expect(json.monthly_revenue).to.be.a('number');",
+                  "  console.log('Total Gyms:', json.total_gyms, '| Active Users:', json.active_users, '| Revenue: $' + json.monthly_revenue);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/dashboard/super-admin", "host": ["{{base_url}}"], "path": ["dashboard", "super-admin"] }
+          }
+        },
+        {
+          "name": "Gym Owner Stats",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Gym owner stats returned', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.total_members).to.be.a('number');",
+                  "  console.log('Members:', json.total_members, '| Today:', json.attendance_today, '| Revenue: $' + json.monthly_revenue);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/dashboard/gym-owner/{{gym_id}}", "host": ["{{base_url}}"], "path": ["dashboard", "gym-owner", "{{gym_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔒 Auth Guard Tests",
+      "item": [
+        {
+          "name": "No Token - Expect 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Unauthorized without token', function() {",
+                  "  pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/gyms/", "host": ["{{base_url}}"], "path": ["gyms", ""] }
+          }
+        },
+        {
+          "name": "Invalid Token - Expect 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Rejects invalid token', function() {",
+                  "  pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer invalid.token.here" }],
+            "url": { "raw": "{{base_url}}/gyms/", "host": ["{{base_url}}"], "path": ["gyms", ""] }
+          }
+        },
+        {
+          "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('API is running', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(pm.response.json().message).to.include('running');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/", "host": ["{{base_url}}"], "path": [""] }
+          }
+        }
+      ]
+    }
+  ]
+}
