@@ -1,4 +1,4 @@
-const BASE_URL = "/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://gym-pb7y.onrender.com";
 
 // ── JWT helpers ───────────────────────────────────────
 function parseJwtPayload(token: string): Record<string, any> | null {
